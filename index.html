@@ -2,318 +2,295 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NaijaBiz Assistant</title>
 <style>
-:root{--g:#0a7a3d;--gd:#065c2d;--gl:#e8f5ec;--tx:#1b2a21;--mu:#6b7c72;--bd:#dce7e0;--bg:#f5f9f6;--red:#c0392b;--amb:#d68910}
+:root{--g:#0b7d3e;--gd:#07592b;--gl:#e7f4ec;--tx:#17251d;--mu:#62736a;--bd:#d9e5dd;--bg:#f4f8f5;--r:#c0392b;--a:#b9770e;--b:#1f6fb2}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
-header{background:var(--g);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5}
-.brand{font-size:1.3rem;font-weight:700}
-nav{display:flex;gap:6px;flex-wrap:wrap}
-nav button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);padding:8px 14px;border-radius:20px;cursor:pointer;font-size:.9rem}
-nav button.active,nav button:hover{background:#fff;color:var(--g)}
-main{max-width:1000px;margin:0 auto;padding:20px}
-.view{display:none}
-.view.active{display:block}
-h2{margin-bottom:14px;color:var(--gd)}
-h3{margin-bottom:8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
-.card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.stat small{color:var(--mu);display:block}
-.stat strong{font-size:1.45rem;color:var(--g)}
+body{font:16px/1.5 "Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:72px}
+header{background:var(--g);color:#fff;padding:12px 18px;position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:700;font-size:1.2rem}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid var(--bd);z-index:6}
+nav button{flex:1;border:0;background:none;padding:8px 2px;font:inherit;font-size:.72rem;color:var(--mu);cursor:pointer}
+nav button b{display:block;font-size:1.25rem}
+nav button.on{color:var(--g);font-weight:700}
+@media(min-width:760px){body{padding-bottom:0}nav{position:static;background:none;border:0;gap:6px}nav button{flex:none;color:#fff;padding:6px 14px;border-radius:18px;font-size:.9rem}nav button b{display:inline;font-size:1rem;margin-right:4px}nav button.on{background:#fff;color:var(--g)}}
+main{max-width:1000px;margin:0 auto;padding:18px}
+.view{display:none}.view.on{display:block}
+h2{color:var(--gd);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px}
+.stat{cursor:pointer;margin:0}.stat:hover{border-color:var(--g)}
+.stat small{color:var(--mu);display:block}.stat strong{font-size:1.35rem;color:var(--g)}
 label{display:block;font-weight:600;font-size:.88rem;margin:10px 0 4px}
 input,select,textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;font:inherit;background:#fff}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--g)}
+input:focus,select:focus,textarea:focus,button:focus-visible,.stat:focus-visible{outline:2px solid var(--g)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.row{grid-template-columns:1fr}}
-.btn{background:var(--g);color:#fff;border:0;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.95rem;margin:12px 8px 0 0;display:inline-block}
-.btn:hover{background:var(--gd)}
-.btn.alt{background:#fff;color:var(--g);border:1px solid var(--g)}
-.btn.alt:hover{background:var(--gl)}
-.total{margin-top:12px;font-size:1.1rem}
-.order{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid var(--bd)}
-.order:last-child{border-bottom:0}
-.info{flex:1 1 240px}
-.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.acts select{width:auto}
-.small{font-size:.85rem;color:var(--mu)}
-.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.78rem;font-weight:600}
-.Pending{background:#fdf1d8;color:var(--amb)}
-.Processing{background:#dcebfa;color:#1f6fb2}
-.Delivered{background:var(--gl);color:var(--g)}
-.Cancelled{background:#fbe0dd;color:var(--red)}
-.icon{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--red)}
-.empty{text-align:center;color:var(--mu);padding:24px}
-.toolbar{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:10px}
-textarea{min-height:200px}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gd);color:#fff;padding:10px 20px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none}
+.btn{background:var(--g);color:#fff;border:0;padding:10px 16px;border-radius:8px;cursor:pointer;font:inherit;font-weight:600;margin:12px 8px 0 0;display:inline-block;text-decoration:none}
+.btn:hover{background:var(--gd)}.btn.alt{background:#fff;color:var(--g);border:1px solid var(--g)}
+.btn.sm{padding:6px 10px;font-size:.85rem;margin:0}.btn.del{color:var(--r);border-color:var(--r)}
+.order{padding:14px 0;border-bottom:1px solid var(--bd)}.order:last-child{border:0}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.acts select{width:auto;padding:6px}
+.small{font-size:.85rem;color:var(--mu)}.ok{color:var(--g)}
+.badge{display:inline-block;padding:1px 9px;border-radius:12px;font-size:.76rem;font-weight:600;background:#eee}
+.Pending{background:#fdf1d8;color:var(--a)}.Processing{background:#dcebfa;color:var(--b)}
+.Outfordelivery{background:#e9e0f7;color:#5b3fa0}.Delivered{background:var(--gl);color:var(--g)}.Cancelled{background:#fbe0dd;color:var(--r)}
+.empty{text-align:center;color:var(--mu);padding:22px}
+.bar{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:8px}
+details{margin-top:6px;font-size:.85rem}details li{margin-left:18px}
+textarea{min-height:190px}
+dialog{border:0;border-radius:12px;padding:20px;width:min(380px,92vw);margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+.radio{display:flex;align-items:center;gap:8px;font-weight:400}.radio input{width:auto}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--gd);color:#fff;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
 </style>
 </head>
 <body>
-
 <header>
   <div class="brand">&#127475;&#127468; NaijaBiz Assistant</div>
-  <nav>
-    <button data-view="dashboard" class="active">Dashboard</button>
-    <button data-view="promo">WhatsApp Promo</button>
-    <button data-view="order">New Order</button>
-    <button data-view="orders">Orders</button>
+  <nav aria-label="Main">
+    <button data-v="dash" class="on"><b>&#128202;</b>Home</button>
+    <button data-v="new"><b>&#10133;</b>New Order</button>
+    <button data-v="orders"><b>&#128230;</b>Orders</button>
+    <button data-v="promo"><b>&#128226;</b>Promo</button>
   </nav>
 </header>
-
 <main>
-
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="view active">
-    <h2>Dashboard</h2>
+  <section id="dash" class="view on">
+    <h2 id="hello">Dashboard</h2>
     <div class="grid" id="stats"></div>
-    <div class="card">
-      <h3>Recent orders</h3>
-      <div id="recent"></div>
-      <button class="btn" data-go="order">+ New Order</button>
-      <button class="btn alt" data-go="promo">Create Promo</button>
-    </div>
+    <div class="card"><h3>Recent orders</h3><div id="recent"></div>
+      <button class="btn" data-go="new">+ New Order</button><button class="btn alt" data-go="promo">Create Promo</button></div>
+    <div class="card small">Your orders are saved only in this browser on this device. Use <b>Backup</b> on the Orders page often. WhatsApp buttons open WhatsApp with your message ready, and you press send yourself. Nothing is sent automatically.</div>
   </section>
 
-  <!-- PROMO GENERATOR -->
-  <section id="promo" class="view">
-    <h2>WhatsApp Promotional Message</h2>
-    <div class="card">
-      <div class="row">
-        <div><label for="pBiz">Business name</label><input id="pBiz" placeholder="e.g. Ada's Fabrics"></div>
-        <div><label for="pProduct">Product or service</label><input id="pProduct" placeholder="e.g. Ankara fabric (6 yards)"></div>
-      </div>
-      <div class="row">
-        <div><label for="pPrice">Price (&#8358;)</label><input id="pPrice" type="number" min="0" placeholder="e.g. 12000"></div>
-        <div><label for="pDiscount">Discount (%) - optional</label><input id="pDiscount" type="number" min="0" max="100" placeholder="e.g. 10"></div>
-      </div>
-      <div class="row">
-        <div><label for="pPhone">Contact / WhatsApp number</label><input id="pPhone" placeholder="e.g. 08012345678"></div>
-        <div><label for="pTone">Style</label>
-          <select id="pTone"><option value="friendly">Friendly</option><option value="flash">Flash sale</option><option value="festive">Festive</option></select>
-        </div>
-      </div>
-      <label for="pNote">Extra note - optional</label>
-      <input id="pNote" placeholder="e.g. Free delivery within Lagos. Offer ends Friday!">
-      <button class="btn" id="genBtn">Generate Message</button>
-      <label for="pOut">Your message</label>
-      <textarea id="pOut" placeholder="Your message will appear here. You can edit it."></textarea>
-      <button class="btn" id="copyBtn">Copy</button>
-      <button class="btn alt" id="sendBtn">Open in WhatsApp</button>
-    </div>
-  </section>
-
-  <!-- ORDER FORM -->
-  <section id="order" class="view">
+  <section id="new" class="view">
     <h2>New Customer Order</h2>
     <div class="card">
-      <div class="row">
-        <div><label for="oName">Customer name *</label><input id="oName" placeholder="e.g. Chidi Okafor"></div>
-        <div><label for="oPhone">Phone number</label><input id="oPhone" placeholder="e.g. 08012345678"></div>
-      </div>
-      <label for="oItem">Item ordered *</label>
-      <input id="oItem" placeholder="e.g. Jollof rice (family pack)">
-      <div class="row">
-        <div><label for="oQty">Quantity *</label><input id="oQty" type="number" min="1" value="1"></div>
-        <div><label for="oPrice">Price per item (&#8358;) *</label><input id="oPrice" type="number" min="0" placeholder="e.g. 5000"></div>
-      </div>
-      <label for="oAddr">Delivery address / note</label>
-      <input id="oAddr" placeholder="e.g. 12 Allen Avenue, Ikeja">
-      <div class="total">Order total: <strong id="oTotal"></strong></div>
-      <button class="btn" id="addBtn">Save Order</button>
-      <button class="btn alt" id="clearBtn">Clear Form</button>
+      <div class="row"><div><label for="oName">Customer name *</label><input id="oName" autocomplete="off"></div>
+      <div><label for="oPhone">Phone (WhatsApp)</label><input id="oPhone" inputmode="tel" placeholder="08012345678"></div></div>
+      <label for="oItem">Item ordered *</label><input id="oItem" placeholder="e.g. Jollof rice, family pack">
+      <div class="row"><div><label for="oQty">Quantity *</label><input id="oQty" type="number" min="1" value="1"></div>
+      <div><label for="oPrice">Price per item (&#8358;) *</label><input id="oPrice" type="number" min="0" inputmode="numeric"></div></div>
+      <div class="row"><div><label for="oFee">Delivery fee (&#8358;)</label><input id="oFee" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+      <div><label for="oPay">Payment</label><select id="oPay"><option>Pay on delivery</option><option>Paid</option><option>Unpaid</option></select></div></div>
+      <label for="oAddr">Delivery address</label><input id="oAddr" placeholder="e.g. 12 Allen Avenue, Ikeja">
+      <p style="margin-top:12px">Order total: <strong id="oTotal"></strong></p>
+      <button class="btn" id="addBtn">Save Order</button><button class="btn alt" id="clrBtn">Clear</button>
     </div>
   </section>
 
-  <!-- ORDER LIST -->
   <section id="orders" class="view">
     <h2>Orders</h2>
     <div class="card">
-      <div class="toolbar">
-        <input id="search" placeholder="Search by customer or item...">
-        <select id="filter">
-          <option>All</option><option>Pending</option><option>Processing</option><option>Delivered</option><option>Cancelled</option>
-        </select>
-      </div>
-      <div id="orderList"></div>
+      <div class="bar"><input id="search" aria-label="Search orders" placeholder="Search customer or item...">
+      <select id="filter" aria-label="Filter by status"><option>All</option><option>Pending</option><option>Processing</option><option>Out for delivery</option><option>Delivered</option><option>Cancelled</option></select></div>
+      <div id="list"></div>
     </div>
+    <button class="btn alt" id="exp">&#11015; Backup</button>
+    <label class="btn alt" style="cursor:pointer;margin-top:12px">&#11014; Restore<input id="imp" type="file" accept=".json" hidden></label>
   </section>
 
+  <section id="promo" class="view">
+    <h2>WhatsApp Promo Message</h2>
+    <div class="card">
+      <div class="row"><div><label for="pBiz">Business name</label><input id="pBiz"></div>
+      <div><label for="pProd">Product or service</label><input id="pProd" placeholder="e.g. Ankara fabric, 6 yards"></div></div>
+      <div class="row"><div><label for="pPrice">Price (&#8358;)</label><input id="pPrice" type="number" min="0"></div>
+      <div><label for="pDisc">Discount % (optional)</label><input id="pDisc" type="number" min="0" max="100"></div></div>
+      <div class="row"><div><label for="pPhone">Order number</label><input id="pPhone" inputmode="tel"></div>
+      <div><label for="pTone">Style</label><select id="pTone"><option value="f">Friendly</option><option value="s">Flash sale</option><option value="c">Festive</option></select></div></div>
+      <label for="pNote">Extra note (optional)</label><input id="pNote" placeholder="e.g. Free delivery in Lagos this week">
+      <button class="btn" id="gen">Generate</button>
+      <label for="pOut">Your message (you can edit it)</label><textarea id="pOut"></textarea>
+      <button class="btn" id="copy">Copy</button><button class="btn alt" id="send">Open in WhatsApp</button>
+    </div>
+  </section>
 </main>
 
-<div id="toast"></div>
+<dialog id="dlg" aria-labelledby="dMsg">
+  <h3 id="dMsg"></h3>
+  <p class="small" style="margin:8px 0">Who is confirming this delivery?</p>
+  <label class="radio"><input type="radio" name="role" value="Seller" checked> Seller</label>
+  <label class="radio"><input type="radio" name="role" value="Dispatch rider"> Dispatch rider</label>
+  <label for="dWho">Name (optional)</label><input id="dWho" placeholder="e.g. Musa">
+  <button class="btn" id="dOk">Yes, confirm delivery</button><button class="btn alt" id="dNo">Cancel</button>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const KEY = 'naijabiz_orders';
-const STATUSES = ['Pending', 'Processing', 'Delivered', 'Cancelled'];
-let orders = [];
-try { orders = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { orders = []; }
+const KEY='naijabiz_orders',BK='naijabiz_biz';
+const ST=['Pending','Processing','Out for delivery','Delivered','Cancelled'];
+const PAYS=['Pay on delivery','Paid','Unpaid'];
+const ACTIVE=['Pending','Processing','Out for delivery'];
+const $=id=>document.getElementById(id);
+const naira=n=>new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',minimumFractionDigits:0,maximumFractionDigits:2}).format(n||0);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cls=s=>s.replace(/\s/g,'');
+const tot=o=>o.qty*o.price+o.fee;
+const fmt=d=>{const x=new Date(d);return isNaN(x)?'':x.toLocaleString('en-NG',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'})};
+const wa=p=>{p=String(p||'').replace(/\D/g,'');return p.startsWith('0')?'234'+p.slice(1):p};
+let orders=[],pend=null,biz={};
+const find=id=>orders.find(o=>o.id==id);
 
-const $ = id => document.getElementById(id);
-const naira = n => new Intl.NumberFormat('en-NG', {style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 2}).format(n || 0);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const wa = p => { p = String(p).replace(/\D/g, ''); return p.startsWith('0') ? '234' + p.slice(1) : p; };
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
 
-function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+function fix(o,i){
+  o.id=Number(o.id)||Date.now()+i;
+  o.name=String(o.name||'Customer');o.item=String(o.item||'Item');
+  o.phone=String(o.phone||'');o.address=String(o.address||'');
+  o.qty=+o.qty>0?+o.qty:1;o.price=+o.price>=0?+o.price:0;o.fee=+o.fee>=0?+o.fee:0;
+  if(!ST.includes(o.status))o.status='Pending';
+  if(!PAYS.includes(o.pay))o.pay='Unpaid';
+  o.date=o.date||new Date().toISOString();
+  if(!Array.isArray(o.history))o.history=[];
+  o.history=o.history.filter(x=>x&&typeof x==='object').map(x=>({s:String(x.s||''),at:x.at||'',note:String(x.note||'')}));
+  if(!o.history.length)o.history=[{s:o.status,at:o.date,note:'Order from earlier version'}];
+  if(o.delivery&&typeof o.delivery==='object'){o.delivery={at:o.delivery.at||'',role:String(o.delivery.role||''),who:String(o.delivery.who||'')}}
+  else delete o.delivery;
+  if(o.status!=='Delivered')delete o.delivery;
+  return o;
 }
+try{orders=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){orders=[]}
+if(!Array.isArray(orders))orders=[];
+orders=orders.filter(o=>o&&typeof o==='object').map(fix);
+try{biz=JSON.parse(localStorage.getItem(BK))||{}}catch(e){biz={}}
+if(!biz||typeof biz!=='object')biz={};
 
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(orders)); } catch (e) { toast('Could not save in this browser'); }
-  render();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(orders))}catch(e){toast('Could not save in this browser')}render()}
+
+function show(v){
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id===v));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  window.scrollTo(0,0);
 }
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
 
-/* ---------- Navigation ---------- */
-function show(v) {
-  document.querySelectorAll('.view').forEach(s => s.classList.toggle('active', s.id === v));
-  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
-  window.scrollTo(0, 0);
+/* ----- new order ----- */
+function updTotal(){$('oTotal').textContent=naira((+$('oQty').value||0)*(+$('oPrice').value||0)+(+$('oFee').value||0))}
+['oQty','oPrice','oFee'].forEach(i=>$(i).oninput=updTotal);
+function clr(){['oName','oPhone','oItem','oPrice','oFee','oAddr'].forEach(i=>$(i).value='');$('oQty').value=1;$('oPay').selectedIndex=0;updTotal()}
+$('clrBtn').onclick=clr;
+$('addBtn').onclick=()=>{
+  const name=$('oName').value.trim(),item=$('oItem').value.trim(),qty=+$('oQty').value,price=$('oPrice').value;
+  if(!name||!item)return toast('Please enter the customer name and item');
+  if(!(qty>0)||price===''||+price<0)return toast('Please enter a valid quantity and price');
+  const now=new Date().toISOString();
+  orders.unshift(fix({id:Date.now(),name,item,qty,price:+price,fee:+$('oFee').value||0,phone:$('oPhone').value.trim(),address:$('oAddr').value.trim(),pay:$('oPay').value,status:'Pending',date:now,history:[{s:'Pending',at:now,note:'Order created'}]},0));
+  save();clr();toast('Order saved!');show('orders');
+};
+
+/* ----- status and delivery ----- */
+function setStatus(o,s,note,at){
+  o.status=s;if(s!=='Delivered')delete o.delivery;
+  o.history.push({s,at:at||new Date().toISOString(),note:note||''});
 }
-document.querySelectorAll('[data-view],[data-go]').forEach(b =>
-  b.addEventListener('click', () => show(b.dataset.view || b.dataset.go)));
-
-/* ---------- Orders ---------- */
-function updateTotal() {
-  $('oTotal').textContent = naira((+$('oQty').value || 0) * (+$('oPrice').value || 0));
+function askDeliver(id){
+  const o=find(id);if(!o)return;pend=o.id;
+  const q='Mark '+o.name+"'s order ("+o.item+') as delivered?';
+  if(typeof $('dlg').showModal!=='function'){if(confirm(q))finish('Seller','');return}
+  $('dMsg').textContent=q;$('dWho').value='';
+  document.querySelector('input[name=role][value=Seller]').checked=true;
+  $('dlg').showModal();
 }
-$('oQty').addEventListener('input', updateTotal);
-$('oPrice').addEventListener('input', updateTotal);
-
-function clearForm() {
-  ['oName', 'oPhone', 'oItem', 'oPrice', 'oAddr'].forEach(id => $(id).value = '');
-  $('oQty').value = 1;
-  updateTotal();
+function finish(role,who){
+  const o=find(pend);if(!o)return;const at=new Date().toISOString();
+  o.delivery={at,role,who};setStatus(o,'Delivered','Confirmed by '+role+(who?' ('+who+')':''),at);
+  pend=null;save();toast('Delivery confirmed');
 }
+$('dOk').onclick=()=>{const r=document.querySelector('input[name=role]:checked').value;const w=$('dWho').value.trim();$('dlg').close();finish(r,w)};
+$('dNo').onclick=()=>{$('dlg').close();pend=null};
 
-$('addBtn').addEventListener('click', () => {
-  const name = $('oName').value.trim();
-  const item = $('oItem').value.trim();
-  const qty = +$('oQty').value;
-  const price = +$('oPrice').value;
-  if (!name || !item) return toast('Please enter the customer name and item');
-  if (!(qty > 0) || !(price >= 0) || $('oPrice').value === '') return toast('Please enter a valid quantity and price');
-  orders.unshift({
-    id: Date.now(), name, item, qty, price,
-    phone: $('oPhone').value.trim(),
-    address: $('oAddr').value.trim(),
-    status: 'Pending',
-    date: new Date().toISOString()
-  });
-  save();
-  clearForm();
-  toast('Order saved!');
-  show('orders');
-});
-$('clearBtn').addEventListener('click', clearForm);
-
-function row(o, full) {
-  const d = new Date(o.date).toLocaleDateString('en-NG', {day: 'numeric', month: 'short', year: 'numeric'});
-  let h = '<div class="order"><div class="info"><strong>' + esc(o.name) + '</strong> <span class="badge ' + o.status + '">' + o.status + '</span><br>'
-    + esc(o.item) + ' &times; ' + o.qty + ' = <strong>' + naira(o.qty * o.price) + '</strong>'
-    + '<div class="small">' + d + (o.phone ? ' &middot; ' + esc(o.phone) : '') + (o.address ? ' &middot; ' + esc(o.address) : '') + '</div></div>';
-  if (full) {
-    h += '<div class="acts"><select data-id="' + o.id + '">'
-      + STATUSES.map(s => '<option' + (s === o.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>';
-    if (o.phone) h += '<a class="btn alt" style="margin:0;text-decoration:none" target="_blank" href="https://wa.me/' + wa(o.phone) + '">WhatsApp</a>';
-    h += '<button class="icon" data-del="' + o.id + '">Delete</button></div>';
+/* ----- rendering ----- */
+function msg(o){
+  const b=biz.name||'our shop',t={'Pending':'we have received it.','Processing':'we are preparing it now.','Out for delivery':'it is on its way to you.','Delivered':'it has been delivered. Thank you for your order!','Cancelled':'it has been cancelled. Please contact us if you have questions.'};
+  return 'Hello '+o.name+', your order of '+o.item+' (x'+o.qty+', total '+naira(tot(o))+') from '+b+': '+t[o.status];
+}
+function card(o,full){
+  const d=new Date(o.date).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'});
+  let h='<div class="order"><strong>'+esc(o.name)+'</strong> <span class="badge '+cls(o.status)+'">'+o.status+'</span> <span class="badge'+(o.pay==='Paid'?' Delivered':'')+'">'+esc(o.pay)+'</span><br>'
+   +esc(o.item)+' &times; '+o.qty+' = <strong>'+naira(tot(o))+'</strong>'+(o.fee?' <span class="small">(incl. '+naira(o.fee)+' delivery)</span>':'')
+   +'<div class="small">'+d+(o.phone?' &middot; '+esc(o.phone):'')+(o.address?' &middot; '+esc(o.address):'')+'</div>';
+  if(o.delivery)h+='<div class="small ok">&#10004; Delivered '+fmt(o.delivery.at)+' &middot; confirmed by '+esc(o.delivery.role)+(o.delivery.who?' ('+esc(o.delivery.who)+')':'')+'</div>';
+  else if(o.status==='Delivered')h+='<div class="small">Delivered (no confirmation details saved)</div>';
+  if(full){
+    h+='<div class="acts"><select data-st="'+o.id+'" aria-label="Order status">'+ST.map(s=>'<option'+(s===o.status?' selected':'')+'>'+s+'</option>').join('')+'</select>'
+     +'<select data-pay="'+o.id+'" aria-label="Payment status">'+PAYS.map(s=>'<option'+(s===o.pay?' selected':'')+'>'+s+'</option>').join('')+'</select>';
+    if(ACTIVE.includes(o.status))h+='<button class="btn sm" data-dv="'+o.id+'">Confirm Delivery</button>';
+    if(wa(o.phone).length>=10)h+='<a class="btn sm alt" target="_blank" rel="noopener" href="https://wa.me/'+wa(o.phone)+'?text='+encodeURIComponent(msg(o))+'">WhatsApp update</a>';
+    h+='<button class="btn sm alt del" data-del="'+o.id+'">Delete</button></div>'
+     +'<details><summary>History ('+o.history.length+')</summary><ul>'+o.history.slice().reverse().map(x=>'<li>'+fmt(x.at)+' &ndash; '+esc(x.s)+(x.note?' &middot; '+esc(x.note):'')+'</li>').join('')+'</ul></details>';
   }
-  return h + '</div>';
+  return h+'</div>';
 }
-
-function render() {
-  const open = orders.filter(o => o.status === 'Pending' || o.status === 'Processing');
-  const done = orders.filter(o => o.status === 'Delivered');
-  const sum = a => a.reduce((s, o) => s + o.qty * o.price, 0);
-  $('stats').innerHTML = [
-    ['Total orders', orders.length],
-    ['Open orders', open.length],
-    ['Delivered', done.length],
-    ['Revenue earned', naira(sum(done))],
-    ['Open order value', naira(sum(open))]
-  ].map(x => '<div class="card stat"><small>' + x[0] + '</small><strong>' + x[1] + '</strong></div>').join('');
-
-  $('recent').innerHTML = orders.length
-    ? orders.slice(0, 5).map(o => row(o, false)).join('')
-    : '<div class="empty">No orders yet. Add your first order!</div>';
-
-  const q = $('search').value.toLowerCase(), f = $('filter').value;
-  const list = orders.filter(o => (f === 'All' || o.status === f) && (o.name + ' ' + o.item).toLowerCase().includes(q));
-  $('orderList').innerHTML = list.length
-    ? list.map(o => row(o, true)).join('')
-    : '<div class="empty">No orders to show.</div>';
+function render(){
+  const n=s=>orders.filter(o=>o.status===s).length,sum=a=>a.reduce((s,o)=>s+tot(o),0);
+  const del=orders.filter(o=>o.status==='Delivered');
+  const owed=orders.filter(o=>o.status!=='Cancelled'&&o.pay!=='Paid');
+  $('hello').textContent=biz.name?'Welcome, '+biz.name:'Dashboard';
+  $('stats').innerHTML=[['Total orders',orders.length,'All'],['Pending',n('Pending'),'Pending'],['Processing',n('Processing'),'Processing'],['Out for delivery',n('Out for delivery'),'Out for delivery'],['Delivered',del.length,'Delivered'],['Cancelled',n('Cancelled'),'Cancelled'],['Revenue (delivered)',naira(sum(del)),'Delivered'],['Money to collect',naira(sum(owed)),'All']]
+    .map(x=>'<div class="card stat" tabindex="0" role="button" data-f="'+x[2]+'"><small>'+x[0]+'</small><strong>'+x[1]+'</strong></div>').join('');
+  $('recent').innerHTML=orders.length?orders.slice(0,5).map(o=>card(o,false)).join(''):'<div class="empty">No orders yet. Tap "New Order" to add your first one.</div>';
+  const q=$('search').value.toLowerCase(),f=$('filter').value;
+  const l=orders.filter(o=>(f==='All'||o.status===f)&&(o.name+' '+o.item).toLowerCase().includes(q));
+  $('list').innerHTML=l.length?l.map(o=>card(o,true)).join(''):'<div class="empty">'+(orders.length?'No orders match your search.':'No orders yet.')+'</div>';
 }
+$('search').oninput=render;$('filter').onchange=render;
+function goFilter(e){const c=e.target.closest('[data-f]');if(c){$('filter').value=c.dataset.f;render();show('orders')}}
+$('stats').onclick=goFilter;
+$('stats').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goFilter(e)}};
+$('list').onchange=e=>{
+  const t=e.target,o=find(t.dataset.st||t.dataset.pay);if(!o)return;
+  if(t.dataset.pay){o.pay=t.value;save();toast('Payment updated');return}
+  if(t.value==='Delivered'){render();askDeliver(o.id);return}
+  if(t.value==='Cancelled'&&!confirm('Cancel this order?')){render();return}
+  setStatus(o,t.value,'Changed by seller');save();toast('Status updated');
+};
+$('list').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.dv)askDeliver(b.dataset.dv);
+  if(b.dataset.del&&confirm('Delete this order? This cannot be undone.')){orders=orders.filter(o=>o.id!=b.dataset.del);save();toast('Order deleted')}
+};
 
-$('search').addEventListener('input', render);
-$('filter').addEventListener('change', render);
+/* ----- backup ----- */
+$('exp').onclick=()=>{
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(orders,null,1)],{type:'application/json'}));
+  a.download='naijabiz-orders-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();toast('Backup downloaded');
+};
+$('imp').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const a=JSON.parse(r.result);if(!Array.isArray(a))throw new Error('bad');
+    const ids=new Set(orders.map(o=>o.id));let c=0;
+    a.forEach((o,i)=>{if(o&&typeof o==='object'&&o.name&&!ids.has(Number(o.id))){const x=fix(o,i);ids.add(x.id);orders.push(x);c++}});
+    orders.sort((x,y)=>new Date(y.date)-new Date(x.date));save();toast(c+' orders restored');
+  }catch(x){toast('That file is not a valid backup')}};
+  r.readAsText(f);e.target.value='';
+};
 
-$('orderList').addEventListener('change', e => {
-  if (e.target.tagName === 'SELECT' && e.target.dataset.id) {
-    const o = orders.find(x => x.id == e.target.dataset.id);
-    if (o) { o.status = e.target.value; save(); toast('Status updated'); }
-  }
-});
-$('orderList').addEventListener('click', e => {
-  const id = e.target.dataset.del;
-  if (id && confirm('Delete this order?')) {
-    orders = orders.filter(x => x.id != id);
-    save();
-    toast('Order deleted');
-  }
-});
+/* ----- promo ----- */
+$('pBiz').value=biz.name||'';$('pPhone').value=biz.phone||'';
+$('gen').onclick=()=>{
+  const b=$('pBiz').value.trim(),p=$('pProd').value.trim(),pr=+$('pPrice').value,d=+$('pDisc').value,ph=$('pPhone').value.trim(),nt=$('pNote').value.trim(),t=$('pTone').value;
+  if(!b||!p)return toast('Please enter your business name and product');
+  biz={name:b,phone:ph};try{localStorage.setItem(BK,JSON.stringify(biz))}catch(e){}
+  const line=pr>0?(d>0?'\u{1F4B0} Was ~'+naira(pr)+'~ NOW *'+naira(pr*(1-d/100))+'* ('+d+'% OFF!)':'\u{1F4B0} Price: *'+naira(pr)+'*'):'';
+  const head={f:'\u{1F44B} Hello from *'+b+'*!\n\nWe have *'+p+'* available for you.',s:'\u{1F525} FLASH SALE at *'+b+'*! \u{1F525}\n\nGrab *'+p+'* before it is gone!',c:'\u{1F389} Celebrate with *'+b+'*! \u{1F389}\n\nTreat yourself to *'+p+'*.'}[t];
+  const foot={f:'Thank you for supporting local business! \u{1F1F3}\u{1F1EC}',s:'\u{23F0} Limited stock. Order now!',c:'Wishing you joy and plenty of good things! \u{1F64F}'}[t];
+  $('pOut').value=[head,line,nt?'\u{2728} '+nt:'',ph?'\u{1F4DE} Order now: '+ph:'\u{1F4AC} Send us a message to order.',foot].filter(Boolean).join('\n\n');
+  render();toast('Message ready!');
+};
+$('copy').onclick=()=>{
+  const t=$('pOut');if(!t.value)return toast('Generate a message first');
+  t.select();const ok=()=>toast('Copied!');
+  if(navigator.clipboard)navigator.clipboard.writeText(t.value).then(ok).catch(()=>{document.execCommand('copy');ok()});else{document.execCommand('copy');ok()}
+};
+$('send').onclick=()=>{const t=$('pOut').value;if(!t)return toast('Generate a message first');window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')};
 
-/* ---------- WhatsApp promo generator ---------- */
-$('genBtn').addEventListener('click', () => {
-  const biz = $('pBiz').value.trim(), prod = $('pProduct').value.trim();
-  const price = +$('pPrice').value, disc = +$('pDiscount').value;
-  const phone = $('pPhone').value.trim(), note = $('pNote').value.trim();
-  if (!biz || !prod) return toast('Please enter your business name and product');
-
-  let priceLine = '';
-  if (price > 0) {
-    priceLine = disc > 0
-      ? '\u{1F4B0} Was ~' + naira(price) + '~ - NOW *' + naira(price * (1 - disc / 100)) + '* (' + disc + '% OFF!)'
-      : '\u{1F4B0} Price: *' + naira(price) + '*';
-  }
-  const tone = $('pTone').value;
-  const head = {
-    friendly: '\u{1F44B} Hello from *' + biz + '*!\n\nWe have *' + prod + '* available for you.',
-    flash: '\u{1F525} FLASH SALE at *' + biz + '*! \u{1F525}\n\nGrab *' + prod + '* before it\'s gone!',
-    festive: '\u{1F389} Celebrate with *' + biz + '*! \u{1F389}\n\nTreat yourself and your loved ones to *' + prod + '*.'
-  }[tone];
-  const foot = {
-    friendly: 'Thank you for supporting local business! \u{1F1F3}\u{1F1EC}',
-    flash: '\u{23F0} Limited stock - order now!',
-    festive: 'Wishing you joy and plenty of good things! \u{1F64F}'
-  }[tone];
-
-  $('pOut').value = [head, priceLine, note ? '\u{2728} ' + note : '', phone ? '\u{1F4DE} Order now: ' + phone : '\u{1F4AC} Send us a message to order.', foot]
-    .filter(Boolean).join('\n\n');
-  toast('Message ready!');
-});
-
-$('copyBtn').addEventListener('click', () => {
-  const t = $('pOut');
-  if (!t.value) return toast('Generate a message first');
-  t.select();
-  const ok = () => toast('Copied!');
-  if (navigator.clipboard) navigator.clipboard.writeText(t.value).then(ok).catch(() => { document.execCommand('copy'); ok(); });
-  else { document.execCommand('copy'); ok(); }
-});
-
-$('sendBtn').addEventListener('click', () => {
-  const t = $('pOut').value;
-  if (!t) return toast('Generate a message first');
-  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
-});
-
-/* ---------- Start ---------- */
-updateTotal();
-render();
+updTotal();render();
 </script>
 </body>
 </html>
