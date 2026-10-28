@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NaijaBiz Assistant</title>
+<style>
+:root{--g:#0a7a3d;--gd:#065c2d;--gl:#e8f5ec;--tx:#1b2a21;--mu:#6b7c72;--bd:#dce7e0;--bg:#f5f9f6;--red:#c0392b;--amb:#d68910}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+header{background:var(--g);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5}
+.brand{font-size:1.3rem;font-weight:700}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);padding:8px 14px;border-radius:20px;cursor:pointer;font-size:.9rem}
+nav button.active,nav button:hover{background:#fff;color:var(--g)}
+main{max-width:1000px;margin:0 auto;padding:20px}
+.view{display:none}
+.view.active{display:block}
+h2{margin-bottom:14px;color:var(--gd)}
+h3{margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.stat small{color:var(--mu);display:block}
+.stat strong{font-size:1.45rem;color:var(--g)}
+label{display:block;font-weight:600;font-size:.88rem;margin:10px 0 4px}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;font:inherit;background:#fff}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--g)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+.btn{background:var(--g);color:#fff;border:0;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:.95rem;margin:12px 8px 0 0;display:inline-block}
+.btn:hover{background:var(--gd)}
+.btn.alt{background:#fff;color:var(--g);border:1px solid var(--g)}
+.btn.alt:hover{background:var(--gl)}
+.total{margin-top:12px;font-size:1.1rem}
+.order{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid var(--bd)}
+.order:last-child{border-bottom:0}
+.info{flex:1 1 240px}
+.acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.acts select{width:auto}
+.small{font-size:.85rem;color:var(--mu)}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.78rem;font-weight:600}
+.Pending{background:#fdf1d8;color:var(--amb)}
+.Processing{background:#dcebfa;color:#1f6fb2}
+.Delivered{background:var(--gl);color:var(--g)}
+.Cancelled{background:#fbe0dd;color:var(--red)}
+.icon{background:#fff;border:1px solid var(--bd);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--red)}
+.empty{text-align:center;color:var(--mu);padding:24px}
+.toolbar{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:10px}
+textarea{min-height:200px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gd);color:#fff;padding:10px 20px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">&#127475;&#127468; NaijaBiz Assistant</div>
+  <nav>
+    <button data-view="dashboard" class="active">Dashboard</button>
+    <button data-view="promo">WhatsApp Promo</button>
+    <button data-view="order">New Order</button>
+    <button data-view="orders">Orders</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="view active">
+    <h2>Dashboard</h2>
+    <div class="grid" id="stats"></div>
+    <div class="card">
+      <h3>Recent orders</h3>
+      <div id="recent"></div>
+      <button class="btn" data-go="order">+ New Order</button>
+      <button class="btn alt" data-go="promo">Create Promo</button>
+    </div>
+  </section>
+
+  <!-- PROMO GENERATOR -->
+  <section id="promo" class="view">
+    <h2>WhatsApp Promotional Message</h2>
+    <div class="card">
+      <div class="row">
+        <div><label for="pBiz">Business name</label><input id="pBiz" placeholder="e.g. Ada's Fabrics"></div>
+        <div><label for="pProduct">Product or service</label><input id="pProduct" placeholder="e.g. Ankara fabric (6 yards)"></div>
+      </div>
+      <div class="row">
+        <div><label for="pPrice">Price (&#8358;)</label><input id="pPrice" type="number" min="0" placeholder="e.g. 12000"></div>
+        <div><label for="pDiscount">Discount (%) - optional</label><input id="pDiscount" type="number" min="0" max="100" placeholder="e.g. 10"></div>
+      </div>
+      <div class="row">
+        <div><label for="pPhone">Contact / WhatsApp number</label><input id="pPhone" placeholder="e.g. 08012345678"></div>
+        <div><label for="pTone">Style</label>
+          <select id="pTone"><option value="friendly">Friendly</option><option value="flash">Flash sale</option><option value="festive">Festive</option></select>
+        </div>
+      </div>
+      <label for="pNote">Extra note - optional</label>
+      <input id="pNote" placeholder="e.g. Free delivery within Lagos. Offer ends Friday!">
+      <button class="btn" id="genBtn">Generate Message</button>
+      <label for="pOut">Your message</label>
+      <textarea id="pOut" placeholder="Your message will appear here. You can edit it."></textarea>
+      <button class="btn" id="copyBtn">Copy</button>
+      <button class="btn alt" id="sendBtn">Open in WhatsApp</button>
+    </div>
+  </section>
+
+  <!-- ORDER FORM -->
+  <section id="order" class="view">
+    <h2>New Customer Order</h2>
+    <div class="card">
+      <div class="row">
+        <div><label for="oName">Customer name *</label><input id="oName" placeholder="e.g. Chidi Okafor"></div>
+        <div><label for="oPhone">Phone number</label><input id="oPhone" placeholder="e.g. 08012345678"></div>
+      </div>
+      <label for="oItem">Item ordered *</label>
+      <input id="oItem" placeholder="e.g. Jollof rice (family pack)">
+      <div class="row">
+        <div><label for="oQty">Quantity *</label><input id="oQty" type="number" min="1" value="1"></div>
+        <div><label for="oPrice">Price per item (&#8358;) *</label><input id="oPrice" type="number" min="0" placeholder="e.g. 5000"></div>
+      </div>
+      <label for="oAddr">Delivery address / note</label>
+      <input id="oAddr" placeholder="e.g. 12 Allen Avenue, Ikeja">
+      <div class="total">Order total: <strong id="oTotal"></strong></div>
+      <button class="btn" id="addBtn">Save Order</button>
+      <button class="btn alt" id="clearBtn">Clear Form</button>
+    </div>
+  </section>
+
+  <!-- ORDER LIST -->
+  <section id="orders" class="view">
+    <h2>Orders</h2>
+    <div class="card">
+      <div class="toolbar">
+        <input id="search" placeholder="Search by customer or item...">
+        <select id="filter">
+          <option>All</option><option>Pending</option><option>Processing</option><option>Delivered</option><option>Cancelled</option>
+        </select>
+      </div>
+      <div id="orderList"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+const KEY = 'naijabiz_orders';
+const STATUSES = ['Pending', 'Processing', 'Delivered', 'Cancelled'];
+let orders = [];
+try { orders = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { orders = []; }
+
+const $ = id => document.getElementById(id);
+const naira = n => new Intl.NumberFormat('en-NG', {style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 2}).format(n || 0);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const wa = p => { p = String(p).replace(/\D/g, ''); return p.startsWith('0') ? '234' + p.slice(1) : p; };
+
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(orders)); } catch (e) { toast('Could not save in this browser'); }
+  render();
+}
+
+/* ---------- Navigation ---------- */
+function show(v) {
+  document.querySelectorAll('.view').forEach(s => s.classList.toggle('active', s.id === v));
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('[data-view],[data-go]').forEach(b =>
+  b.addEventListener('click', () => show(b.dataset.view || b.dataset.go)));
+
+/* ---------- Orders ---------- */
+function updateTotal() {
+  $('oTotal').textContent = naira((+$('oQty').value || 0) * (+$('oPrice').value || 0));
+}
+$('oQty').addEventListener('input', updateTotal);
+$('oPrice').addEventListener('input', updateTotal);
+
+function clearForm() {
+  ['oName', 'oPhone', 'oItem', 'oPrice', 'oAddr'].forEach(id => $(id).value = '');
+  $('oQty').value = 1;
+  updateTotal();
+}
+
+$('addBtn').addEventListener('click', () => {
+  const name = $('oName').value.trim();
+  const item = $('oItem').value.trim();
+  const qty = +$('oQty').value;
+  const price = +$('oPrice').value;
+  if (!name || !item) return toast('Please enter the customer name and item');
+  if (!(qty > 0) || !(price >= 0) || $('oPrice').value === '') return toast('Please enter a valid quantity and price');
+  orders.unshift({
+    id: Date.now(), name, item, qty, price,
+    phone: $('oPhone').value.trim(),
+    address: $('oAddr').value.trim(),
+    status: 'Pending',
+    date: new Date().toISOString()
+  });
+  save();
+  clearForm();
+  toast('Order saved!');
+  show('orders');
+});
+$('clearBtn').addEventListener('click', clearForm);
+
+function row(o, full) {
+  const d = new Date(o.date).toLocaleDateString('en-NG', {day: 'numeric', month: 'short', year: 'numeric'});
+  let h = '<div class="order"><div class="info"><strong>' + esc(o.name) + '</strong> <span class="badge ' + o.status + '">' + o.status + '</span><br>'
+    + esc(o.item) + ' &times; ' + o.qty + ' = <strong>' + naira(o.qty * o.price) + '</strong>'
+    + '<div class="small">' + d + (o.phone ? ' &middot; ' + esc(o.phone) : '') + (o.address ? ' &middot; ' + esc(o.address) : '') + '</div></div>';
+  if (full) {
+    h += '<div class="acts"><select data-id="' + o.id + '">'
+      + STATUSES.map(s => '<option' + (s === o.status ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>';
+    if (o.phone) h += '<a class="btn alt" style="margin:0;text-decoration:none" target="_blank" href="https://wa.me/' + wa(o.phone) + '">WhatsApp</a>';
+    h += '<button class="icon" data-del="' + o.id + '">Delete</button></div>';
+  }
+  return h + '</div>';
+}
+
+function render() {
+  const open = orders.filter(o => o.status === 'Pending' || o.status === 'Processing');
+  const done = orders.filter(o => o.status === 'Delivered');
+  const sum = a => a.reduce((s, o) => s + o.qty * o.price, 0);
+  $('stats').innerHTML = [
+    ['Total orders', orders.length],
+    ['Open orders', open.length],
+    ['Delivered', done.length],
+    ['Revenue earned', naira(sum(done))],
+    ['Open order value', naira(sum(open))]
+  ].map(x => '<div class="card stat"><small>' + x[0] + '</small><strong>' + x[1] + '</strong></div>').join('');
+
+  $('recent').innerHTML = orders.length
+    ? orders.slice(0, 5).map(o => row(o, false)).join('')
+    : '<div class="empty">No orders yet. Add your first order!</div>';
+
+  const q = $('search').value.toLowerCase(), f = $('filter').value;
+  const list = orders.filter(o => (f === 'All' || o.status === f) && (o.name + ' ' + o.item).toLowerCase().includes(q));
+  $('orderList').innerHTML = list.length
+    ? list.map(o => row(o, true)).join('')
+    : '<div class="empty">No orders to show.</div>';
+}
+
+$('search').addEventListener('input', render);
+$('filter').addEventListener('change', render);
+
+$('orderList').addEventListener('change', e => {
+  if (e.target.tagName === 'SELECT' && e.target.dataset.id) {
+    const o = orders.find(x => x.id == e.target.dataset.id);
+    if (o) { o.status = e.target.value; save(); toast('Status updated'); }
+  }
+});
+$('orderList').addEventListener('click', e => {
+  const id = e.target.dataset.del;
+  if (id && confirm('Delete this order?')) {
+    orders = orders.filter(x => x.id != id);
+    save();
+    toast('Order deleted');
+  }
+});
+
+/* ---------- WhatsApp promo generator ---------- */
+$('genBtn').addEventListener('click', () => {
+  const biz = $('pBiz').value.trim(), prod = $('pProduct').value.trim();
+  const price = +$('pPrice').value, disc = +$('pDiscount').value;
+  const phone = $('pPhone').value.trim(), note = $('pNote').value.trim();
+  if (!biz || !prod) return toast('Please enter your business name and product');
+
+  let priceLine = '';
+  if (price > 0) {
+    priceLine = disc > 0
+      ? '\u{1F4B0} Was ~' + naira(price) + '~ - NOW *' + naira(price * (1 - disc / 100)) + '* (' + disc + '% OFF!)'
+      : '\u{1F4B0} Price: *' + naira(price) + '*';
+  }
+  const tone = $('pTone').value;
+  const head = {
+    friendly: '\u{1F44B} Hello from *' + biz + '*!\n\nWe have *' + prod + '* available for you.',
+    flash: '\u{1F525} FLASH SALE at *' + biz + '*! \u{1F525}\n\nGrab *' + prod + '* before it\'s gone!',
+    festive: '\u{1F389} Celebrate with *' + biz + '*! \u{1F389}\n\nTreat yourself and your loved ones to *' + prod + '*.'
+  }[tone];
+  const foot = {
+    friendly: 'Thank you for supporting local business! \u{1F1F3}\u{1F1EC}',
+    flash: '\u{23F0} Limited stock - order now!',
+    festive: 'Wishing you joy and plenty of good things! \u{1F64F}'
+  }[tone];
+
+  $('pOut').value = [head, priceLine, note ? '\u{2728} ' + note : '', phone ? '\u{1F4DE} Order now: ' + phone : '\u{1F4AC} Send us a message to order.', foot]
+    .filter(Boolean).join('\n\n');
+  toast('Message ready!');
+});
+
+$('copyBtn').addEventListener('click', () => {
+  const t = $('pOut');
+  if (!t.value) return toast('Generate a message first');
+  t.select();
+  const ok = () => toast('Copied!');
+  if (navigator.clipboard) navigator.clipboard.writeText(t.value).then(ok).catch(() => { document.execCommand('copy'); ok(); });
+  else { document.execCommand('copy'); ok(); }
+});
+
+$('sendBtn').addEventListener('click', () => {
+  const t = $('pOut').value;
+  if (!t) return toast('Generate a message first');
+  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
+});
+
+/* ---------- Start ---------- */
+updateTotal();
+render();
+</script>
+</body>
+</html>
